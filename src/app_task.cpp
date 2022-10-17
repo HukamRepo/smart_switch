@@ -13,6 +13,8 @@
 
 #include <platform/CHIPDeviceLayer.h>
 
+#include <app-common/zap-generated/attributes/Accessors.h>
+
 #include "board_util.h"
 #include <app/server/OnboardingCodesUtil.h>
 #include <app/server/Server.h>
@@ -59,6 +61,8 @@ bool sIsNetworkEnabled;
 bool sHaveBLEConnections;
 
 k_timer sFunctionTimer;
+k_timer sSensorTimer;
+
 } /* namespace */
 
 AppTask AppTask::sAppTask;
@@ -141,6 +145,11 @@ CHIP_ERROR AppTask::Init()
 	k_timer_init(&sFunctionTimer, &AppTask::TimerEventHandler, nullptr);
 	k_timer_user_data_set(&sFunctionTimer, this);
 
+	/* Initialize sensor timer */
+	k_timer_init(&sSensorTimer, &AppTask::SensorTimerHandler, nullptr);
+	k_timer_user_data_set(&sSensorTimer, this);
+	// return 0;
+
 	/* Initialize CHIP server */
 #if CONFIG_CHIP_FACTORY_DATA
 	ReturnErrorOnFailure(mFactoryDataProvider.Init());
@@ -210,6 +219,15 @@ void AppTask::DispatchEvent(const AppEvent &event)
 	case AppEvent::UpdateLedState:
 		event.UpdateLedStateEvent.LedWidget->UpdateState();
 		break;
+	case AppEvent::SensorActivate:
+			SensorActivateHandler();
+			break;
+	case AppEvent::SensorDeactivate:
+			SensorDeactivateHandler();
+			break;
+	case AppEvent::SensorMeasure:
+			SensorMeasureHandler();
+			break;
 	default:
 		LOG_INF("Unknown event received");
 		break;
@@ -336,3 +354,38 @@ void AppTask::TimerEventHandler(k_timer *timer)
 {
 	GetAppTask().PostEvent(AppEvent{ AppEvent::FunctionTimer });
 }
+
+
+void AppTask::SensorTimerHandler(k_timer *timer)
+{
+        GetAppTask().PostEvent(AppEvent{ AppEvent::SensorMeasure });
+}
+
+void AppTask::StartSensorTimer(uint32_t aTimeoutMs)
+{
+        k_timer_start(&sSensorTimer, K_MSEC(aTimeoutMs), K_MSEC(aTimeoutMs));
+}
+
+void AppTask::StopSensorTimer()
+{
+        k_timer_stop(&sSensorTimer);
+}
+
+
+void AppTask::SensorActivateHandler()
+{
+        StartSensorTimer(500);
+}
+
+void AppTask::SensorDeactivateHandler()
+{
+        StopSensorTimer();
+}
+
+void AppTask::SensorMeasureHandler()
+{
+        chip::app::Clusters::TemperatureMeasurement::Attributes::MeasuredValue::Set(
+                /* endpoint ID */ 1, /* temperature in 0.01*C */ int16_t(rand() % 5000));
+}
+
+

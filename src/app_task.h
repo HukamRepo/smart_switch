@@ -49,6 +49,14 @@ private:
 	static AppTask sAppTask;
 	bool mFunctionTimerActive = false;
 
+	static void SensorTimerHandler(k_timer *timer);
+	void StartSensorTimer(uint32_t timeoutInMs);
+	void StopSensorTimer();
+
+	void SensorActivateHandler();
+	void SensorDeactivateHandler();
+	void SensorMeasureHandler();
+
 #if CONFIG_CHIP_FACTORY_DATA
 	chip::DeviceLayer::FactoryDataProvider<chip::DeviceLayer::InternalFlashFactoryData> mFactoryDataProvider;
 #endif

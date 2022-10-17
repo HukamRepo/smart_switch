@@ -39,6 +39,7 @@ target_sources(app PRIVATE
     src/main.cpp
     src/zap-generated/IMClusterCommandHandler.cpp
     src/zap-generated/callback-stub.cpp
+    src/zcl_callbacks.cpp
     ${COMMON_ROOT}/src/led_widget.cpp
     $<$<BOOL:${CONFIG_NET_L2_OPENTHREAD}>:${COMMON_ROOT}/src/thread_util.cpp>
 )
