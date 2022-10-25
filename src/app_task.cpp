@@ -220,14 +220,14 @@ void AppTask::DispatchEvent(const AppEvent &event)
 		event.UpdateLedStateEvent.LedWidget->UpdateState();
 		break;
 	case AppEvent::SensorActivate:
-			SensorActivateHandler();
-			break;
+		SensorActivateHandler();
+		break;
 	case AppEvent::SensorDeactivate:
-			SensorDeactivateHandler();
-			break;
+		SensorDeactivateHandler();
+		break;
 	case AppEvent::SensorMeasure:
-			SensorMeasureHandler();
-			break;
+		SensorMeasureHandler();
+		break;
 	default:
 		LOG_INF("Unknown event received");
 		break;
@@ -356,36 +356,45 @@ void AppTask::TimerEventHandler(k_timer *timer)
 }
 
 
-void AppTask::SensorTimerHandler(k_timer *timer)
+void  AppTask::SensorTimerHandler(k_timer *timer)
 {
         GetAppTask().PostEvent(AppEvent{ AppEvent::SensorMeasure });
 }
 
 void AppTask::StartSensorTimer(uint32_t aTimeoutMs)
 {
-        k_timer_start(&sSensorTimer, K_MSEC(aTimeoutMs), K_MSEC(aTimeoutMs));
+	LOG_INF("\n\n IN SENSOR TIMER STARTED SUCCESSFULLY >>>>>>>>");
+    k_timer_start(&sSensorTimer, K_MSEC(aTimeoutMs), K_MSEC(aTimeoutMs));
+		
 }
 
 void AppTask::StopSensorTimer()
 {
-        k_timer_stop(&sSensorTimer);
+	LOG_INF("\n\nIN SENSOR TIMER STOPPED SUCCESSFULLY >>>>>>>>");
+    k_timer_stop(&sSensorTimer);	
 }
 
 
 void AppTask::SensorActivateHandler()
 {
-        StartSensorTimer(500);
+        sAppTask.StartSensorTimer(500);
 }
 
 void AppTask::SensorDeactivateHandler()
 {
-        StopSensorTimer();
+        sAppTask.StopSensorTimer();
 }
 
 void AppTask::SensorMeasureHandler()
 {
+		// static int16_t celciusDegree = 0;
+		// celciusDegree++;
+		// celciusDegree %= 20;
+		// chip::app::Clusters::TemperatureMeasurement::Attributes::MeasuredValue::Set(1, celciusDegree);
         chip::app::Clusters::TemperatureMeasurement::Attributes::MeasuredValue::Set(
                 /* endpoint ID */ 1, /* temperature in 0.01*C */ int16_t(rand() % 5000));
+		
+		LOG_INF("\n\nTemperature Value Set in Attribute SUCCESSFULLY >>>>>>>>");
 }
 
 

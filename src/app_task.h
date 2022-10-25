@@ -34,12 +34,20 @@ private:
 	void FunctionReleaseHandler();
 	void FunctionTimerEventHandler();
 
+	void StartSensorTimer(uint32_t timeoutInMs);
+	void StopSensorTimer();
+	void SensorActivateHandler();
+	void SensorDeactivateHandler();
+	void SensorMeasureHandler();
+
 	static void UpdateStatusLED();
 	static void LEDStateUpdateHandler(LEDWidget &ledWidget);
 	static void ChipEventHandler(const chip::DeviceLayer::ChipDeviceEvent *event, intptr_t arg);
 	static void ButtonEventHandler(uint32_t buttonState, uint32_t hasChanged);
 	static void TimerEventHandler(k_timer *timer);
 
+	static void SensorTimerHandler(k_timer *timer);
+	
 	friend AppTask &GetAppTask();
 
 	enum class TimerFunction { NoneSelected = 0, FactoryReset };
@@ -49,13 +57,7 @@ private:
 	static AppTask sAppTask;
 	bool mFunctionTimerActive = false;
 
-	static void SensorTimerHandler(k_timer *timer);
-	void StartSensorTimer(uint32_t timeoutInMs);
-	void StopSensorTimer();
-
-	void SensorActivateHandler();
-	void SensorDeactivateHandler();
-	void SensorMeasureHandler();
+	
 
 #if CONFIG_CHIP_FACTORY_DATA
 	chip::DeviceLayer::FactoryDataProvider<chip::DeviceLayer::InternalFlashFactoryData> mFactoryDataProvider;
