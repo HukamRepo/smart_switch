@@ -11,7 +11,6 @@ get_filename_component(MATTER_MODULE_ROOT $ENV{ZEPHYR_BASE}/../modules/lib/matte
 # Set Kconfig root files that will be processed as a first Kconfig for used child images.
 set(mcuboot_KCONFIG_ROOT ${MATTER_MODULE_ROOT}/config/nrfconnect/chip-module/Kconfig.mcuboot.root)
 set(multiprotocol_rpmsg_KCONFIG_ROOT ${MATTER_MODULE_ROOT}/config/nrfconnect/chip-module/Kconfig.multiprotocol_rpmsg.root)
-set(hci_rpmsg_KCONFIG_ROOT ${MATTER_MODULE_ROOT}/config/nrfconnect/chip-module/Kconfig.hci_rpmsg.root)
 
 if(NOT CONF_FILE STREQUAL "prj_no_dfu.conf")
     set(PM_STATIC_YML_FILE ${CMAKE_CURRENT_SOURCE_DIR}/configuration/${BOARD}/pm_static_dfu.yml)
@@ -19,7 +18,7 @@ endif()
 
 find_package(Zephyr HINTS $ENV{ZEPHYR_BASE})
 
-project(matter-template)
+project(matter-light-bulb)
 
 set(COMMON_ROOT ${ZEPHYR_NRF_MODULE_DIR}/samples/matter/common)
 set(NLIO_ROOT ${MATTER_MODULE_ROOT}/third_party/nlio/repo)
@@ -36,20 +35,25 @@ target_include_directories(app PRIVATE
 
 target_sources(app PRIVATE
     src/app_task.cpp
+    src/lighting_manager.cpp
     src/main.cpp
+    src/zcl_callbacks.cpp
     src/zap-generated/IMClusterCommandHandler.cpp
     src/zap-generated/callback-stub.cpp
-    src/zcl_callbacks.cpp
     ${COMMON_ROOT}/src/led_widget.cpp
-    $<$<BOOL:${CONFIG_NET_L2_OPENTHREAD}>:${COMMON_ROOT}/src/thread_util.cpp>
+    ${COMMON_ROOT}/src/thread_util.cpp
 )
 
 if(CONFIG_CHIP_OTA_REQUESTOR)
     target_sources(app PRIVATE ${COMMON_ROOT}/src/ota_util.cpp)
 endif()
 
+if(CONFIG_MCUMGR_SMP_BT)
+    target_sources(app PRIVATE ${COMMON_ROOT}/src/dfu_over_smp.cpp)
+endif()
+
 chip_configure_data_model(app
     INCLUDE_SERVER
-    ZAP_FILE ${CMAKE_CURRENT_SOURCE_DIR}/src/template.zap
+    ZAP_FILE ${CMAKE_CURRENT_SOURCE_DIR}/src/light_bulb.zap
 )
 # NORDIC SDK APP END

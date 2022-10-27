@@ -1,4 +1,13 @@
+/*
+ * Copyright (c) 2021 Nordic Semiconductor ASA
+ *
+ * SPDX-License-Identifier: LicenseRef-Nordic-5-Clause
+ */
+
+#include <lib/support/logging/CHIPLogging.h>
+
 #include "app_task.h"
+#include "lighting_manager.h"
 
 #include <app-common/zap-generated/ids/Attributes.h>
 #include <app-common/zap-generated/ids/Clusters.h>
@@ -7,27 +16,37 @@
 using namespace ::chip;
 using namespace ::chip::app::Clusters;
 
-void MatterPostAttributeChangeCallback(const chip::app::ConcreteAttributePath & attributePath, uint8_t mask, uint8_t type,
-                                       uint16_t size, uint8_t * value)
+void MatterPostAttributeChangeCallback(const chip::app::ConcreteAttributePath &attributePath, uint8_t type,
+				       uint16_t size, uint8_t *value)
 {
-        // if (attributePath.mClusterId != OnOff::Id || attributePath.mAttributeId != OnOff::Attributes::OnOff::Id)
-        //         return;
-
-        // GetAppTask().PostEvent(AppEvent(*value ? AppEvent::SensorActivate : AppEvent::SensorDeactivate));
-
-    ClusterId clusterId = attributePath.mClusterId;
+	ClusterId clusterId = attributePath.mClusterId;
 	AttributeId attributeId = attributePath.mAttributeId;
-
-	ChipLogProgress(Zcl, "\n\nclusterId: >>>>>>> %" PRIu8, clusterId);
-	ChipLogProgress(Zcl, "attributeId: >>>>>>> %" PRIu8, attributeId);
 
 	if (clusterId == OnOff::Id && attributeId == OnOff::Attributes::OnOff::Id) {
 		ChipLogProgress(Zcl, "Cluster OnOff: attribute OnOff set to %" PRIu8, *value);
-		// GetAppTask().PostEvent(AppEvent(*value ? AppEvent::SensorActivate : AppEvent::SensorDeactivate, *value, true));
-                GetAppTask().PostEvent(AppEvent(*value ? AppEvent::SensorActivate : AppEvent::SensorDeactivate));
-	} else if (clusterId == TemperatureMeasurement::Id && attributeId == TemperatureMeasurement::Attributes::MeasuredValue::Id) {
-		ChipLogProgress(Zcl, "Cluster TemperatureMeasurement: attribute MeasuredValue set to %" PRIu8, *value);
-		GetAppTask().PostEvent(AppEvent(AppEvent::SensorMeasure));                
+		GetAppTask().PostEvent(AppEvent(*value ? AppEvent::On : AppEvent::Off, *value, true));
+	} else if (clusterId == LevelControl::Id && attributeId == LevelControl::Attributes::CurrentLevel::Id) {
+		ChipLogProgress(Zcl, "Cluster LevelControl: attribute CurrentLevel set to %" PRIu8, *value);
+		GetAppTask().PostEvent(AppEvent(AppEvent::Level, *value, true));
 	}
+}
 
+/** @brief OnOff Cluster Init
+ *
+ * This function is called when a specific cluster is initialized. It gives the
+ * application an opportunity to take care of cluster initialization procedures.
+ * It is called exactly once for each endpoint where cluster is present.
+ *
+ * @param endpoint   Ver.: always
+ *
+ * TODO Issue #3841
+ * emberAfOnOffClusterInitCallback happens before the stack initialize the cluster
+ * attributes to the default value.
+ * The logic here expects something similar to the deprecated Plugins callback
+ * emberAfPluginOnOffClusterServerPostInitCallback.
+ *
+ */
+void emberAfOnOffClusterInitCallback(EndpointId endpoint)
+{
+	GetAppTask().UpdateClusterState();
 }

@@ -29,6 +29,8 @@
 
 // Parallel array data (*cluster*, attribute, privilege) for read attribute
 #define GENERATED_ACCESS_READ_ATTRIBUTE__CLUSTER { \
+    /* Cluster: On/Off, Attribute: StartUpOnOff, Privilege: view */ \
+    /* Cluster: Level Control, Attribute: StartUpCurrentLevel, Privilege: view */ \
     31, /* Cluster: Access Control, Attribute: ACL, Privilege: administer */ \
     31, /* Cluster: Access Control, Attribute: Extension, Privilege: administer */ \
     /* Cluster: Access Control, Attribute: SubjectsPerAccessControlEntry, Privilege: view */ \
@@ -50,6 +52,8 @@
 
 // Parallel array data (cluster, *attribute*, privilege) for read attribute
 #define GENERATED_ACCESS_READ_ATTRIBUTE__ATTRIBUTE { \
+    /* Cluster: On/Off, Attribute: StartUpOnOff, Privilege: view */ \
+    /* Cluster: Level Control, Attribute: StartUpCurrentLevel, Privilege: view */ \
     0, /* Cluster: Access Control, Attribute: ACL, Privilege: administer */ \
     1, /* Cluster: Access Control, Attribute: Extension, Privilege: administer */ \
     /* Cluster: Access Control, Attribute: SubjectsPerAccessControlEntry, Privilege: view */ \
@@ -71,6 +75,8 @@
 
 // Parallel array data (cluster, attribute, *privilege*) for read attribute
 #define GENERATED_ACCESS_READ_ATTRIBUTE__PRIVILEGE { \
+    /* Cluster: On/Off, Attribute: StartUpOnOff, Privilege: view */ \
+    /* Cluster: Level Control, Attribute: StartUpCurrentLevel, Privilege: view */ \
     kMatterAccessPrivilegeAdminister, /* Cluster: Access Control, Attribute: ACL, Privilege: administer */ \
     kMatterAccessPrivilegeAdminister, /* Cluster: Access Control, Attribute: Extension, Privilege: administer */ \
     /* Cluster: Access Control, Attribute: SubjectsPerAccessControlEntry, Privilege: view */ \
@@ -94,6 +100,8 @@
 
 // Parallel array data (*cluster*, attribute, privilege) for write attribute
 #define GENERATED_ACCESS_WRITE_ATTRIBUTE__CLUSTER { \
+    6, /* Cluster: On/Off, Attribute: StartUpOnOff, Privilege: manage */ \
+    8, /* Cluster: Level Control, Attribute: StartUpCurrentLevel, Privilege: manage */ \
     31, /* Cluster: Access Control, Attribute: ACL, Privilege: administer */ \
     31, /* Cluster: Access Control, Attribute: Extension, Privilege: administer */ \
     40, /* Cluster: Basic, Attribute: NodeLabel, Privilege: manage */ \
@@ -106,6 +114,8 @@
 
 // Parallel array data (cluster, *attribute*, privilege) for write attribute
 #define GENERATED_ACCESS_WRITE_ATTRIBUTE__ATTRIBUTE { \
+    16387, /* Cluster: On/Off, Attribute: StartUpOnOff, Privilege: manage */ \
+    16384, /* Cluster: Level Control, Attribute: StartUpCurrentLevel, Privilege: manage */ \
     0, /* Cluster: Access Control, Attribute: ACL, Privilege: administer */ \
     1, /* Cluster: Access Control, Attribute: Extension, Privilege: administer */ \
     5, /* Cluster: Basic, Attribute: NodeLabel, Privilege: manage */ \
@@ -118,6 +128,8 @@
 
 // Parallel array data (cluster, attribute, *privilege*) for write attribute
 #define GENERATED_ACCESS_WRITE_ATTRIBUTE__PRIVILEGE { \
+    kMatterAccessPrivilegeManage, /* Cluster: On/Off, Attribute: StartUpOnOff, Privilege: manage */ \
+    kMatterAccessPrivilegeManage, /* Cluster: Level Control, Attribute: StartUpCurrentLevel, Privilege: manage */ \
     kMatterAccessPrivilegeAdminister, /* Cluster: Access Control, Attribute: ACL, Privilege: administer */ \
     kMatterAccessPrivilegeAdminister, /* Cluster: Access Control, Attribute: Extension, Privilege: administer */ \
     kMatterAccessPrivilegeManage, /* Cluster: Basic, Attribute: NodeLabel, Privilege: manage */ \
@@ -134,6 +146,10 @@
 #define GENERATED_ACCESS_INVOKE_COMMAND__CLUSTER { \
     3, /* Cluster: Identify, Command: Identify, Privilege: manage */ \
     3, /* Cluster: Identify, Command: TriggerEffect, Privilege: manage */ \
+    4, /* Cluster: Groups, Command: AddGroup, Privilege: manage */ \
+    4, /* Cluster: Groups, Command: RemoveGroup, Privilege: manage */ \
+    4, /* Cluster: Groups, Command: RemoveAllGroups, Privilege: manage */ \
+    4, /* Cluster: Groups, Command: AddGroupIfIdentifying, Privilege: manage */ \
     48, /* Cluster: General Commissioning, Command: ArmFailSafe, Privilege: administer */ \
     48, /* Cluster: General Commissioning, Command: SetRegulatoryConfig, Privilege: administer */ \
     48, /* Cluster: General Commissioning, Command: CommissioningComplete, Privilege: administer */ \
@@ -164,6 +180,10 @@
 #define GENERATED_ACCESS_INVOKE_COMMAND__COMMAND { \
     0, /* Cluster: Identify, Command: Identify, Privilege: manage */ \
     64, /* Cluster: Identify, Command: TriggerEffect, Privilege: manage */ \
+    0, /* Cluster: Groups, Command: AddGroup, Privilege: manage */ \
+    3, /* Cluster: Groups, Command: RemoveGroup, Privilege: manage */ \
+    4, /* Cluster: Groups, Command: RemoveAllGroups, Privilege: manage */ \
+    5, /* Cluster: Groups, Command: AddGroupIfIdentifying, Privilege: manage */ \
     0, /* Cluster: General Commissioning, Command: ArmFailSafe, Privilege: administer */ \
     2, /* Cluster: General Commissioning, Command: SetRegulatoryConfig, Privilege: administer */ \
     4, /* Cluster: General Commissioning, Command: CommissioningComplete, Privilege: administer */ \
@@ -194,6 +214,10 @@
 #define GENERATED_ACCESS_INVOKE_COMMAND__PRIVILEGE { \
     kMatterAccessPrivilegeManage, /* Cluster: Identify, Command: Identify, Privilege: manage */ \
     kMatterAccessPrivilegeManage, /* Cluster: Identify, Command: TriggerEffect, Privilege: manage */ \
+    kMatterAccessPrivilegeManage, /* Cluster: Groups, Command: AddGroup, Privilege: manage */ \
+    kMatterAccessPrivilegeManage, /* Cluster: Groups, Command: RemoveGroup, Privilege: manage */ \
+    kMatterAccessPrivilegeManage, /* Cluster: Groups, Command: RemoveAllGroups, Privilege: manage */ \
+    kMatterAccessPrivilegeManage, /* Cluster: Groups, Command: AddGroupIfIdentifying, Privilege: manage */ \
     kMatterAccessPrivilegeAdminister, /* Cluster: General Commissioning, Command: ArmFailSafe, Privilege: administer */ \
     kMatterAccessPrivilegeAdminister, /* Cluster: General Commissioning, Command: SetRegulatoryConfig, Privilege: administer */ \
     kMatterAccessPrivilegeAdminister, /* Cluster: General Commissioning, Command: CommissioningComplete, Privilege: administer */ \

@@ -127,7 +127,7 @@ dataset set active 0e080000000000010000000300001135060004001fffe00208ae6d22058f1
 
 
 
-./chip-tool pairing ble-thread 1 hex:0e080000000000010000000300000f35060004001fffe0020811111111222222220708fd912c1750433385051000112233445566778899aabbccddeeff030e4f70656e54687265616444656d6f010212340410445f2b5ca6f2a93a55ce570a70efeecb0c0402a0f7f8 20202021 3840
+./chip-tool pairing ble-thread 2 hex:0e080000000000010000000300000f35060004001fffe0020811111111222222220708fd05e82aab2b4c45051000112233445566778899aabbccddeeff030e4f70656e54687265616444656d6f010212340410445f2b5ca6f2a93a55ce570a70efeecb0c0402a0f7f8 20202021 3840
 
 out/debug/chip-tool pairing onnetwork 1 20202021
 
@@ -136,12 +136,12 @@ out/debug/chip-tool pairing onnetwork-long 1 20202021 3840
 out/debug/chip-tool basic read vendor-name 25 1
 
 
-out/debug/chip-tool pairing unpair 25
+./chip-tool pairing unpair 2
 
 out/debug/chip-tool onoff toggle <node_id> <endpoint_id>
-./chip-tool onoff toggle 1 1
+./chip-tool onoff toggle 2 1
 
-out/debug/chip-tool levelcontrol move-to-level 100 5 0 0 1 1
+./chip-tool levelcontrol move-to-level 5 5 0 0 2 1
 
 ./chip-tool onoff on 1 1
 ./chip-tool temperaturemeasurement read measured-value 1 1
@@ -178,6 +178,8 @@ sudo ot-ctl ifconfig up
 sudo ot-ctl thread start
 sudo ot-ctl netdata register
 sudo ot-ctl state
+
+sudo ot-ctl dataset active -x
 
 
 ping 64:ff9b::808:808
@@ -273,6 +275,7 @@ sudo route -A inet6 add 64:ff9b::/96 dev wpan0
     - [nRF Thread Tools](https://developer.nordicsemi.com/nRF_Connect_SDK/doc/2.0.0/nrf/ug_thread_tools.html)
     - [Thread CHIP Tool](https://developer.nordicsemi.com/nRF_Connect_SDK/doc/2.1.0/matter/chip_tool_guide.html)
     - [nRF Custom Template](https://developer.nordicsemi.com/nRF_Connect_SDK/doc/2.1.0/nrf/ug_matter_gs_adding_clusters.html#ug-matter-creating-accessory)
+    - [Matter Compliant](https://www.digicert.com/blog/how-to-become-matter-compliant)
 
 
 
