@@ -104,7 +104,7 @@ CHIP_ERROR AppTask::Init()
 #endif
 
 	/* Initialize LEDs */
-	LEDWidget::InitGpio();
+	LEDWidget::InitGpio(); 
 	LEDWidget::SetStateUpdateCallback(LEDStateUpdateHandler);
 
 	sStatusLED.Init(DK_LED1);

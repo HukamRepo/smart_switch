@@ -18,9 +18,11 @@ endif()
 
 find_package(Zephyr HINTS $ENV{ZEPHYR_BASE})
 
-project(matter-light-bulb)
+# project(matter-light-bulb)
+project(hukam-smart-switch)
 
-set(COMMON_ROOT ${ZEPHYR_NRF_MODULE_DIR}/samples/matter/common)
+# set(COMMON_ROOT ${ZEPHYR_NRF_MODULE_DIR}/samples/matter/common)
+set(COMMON_ROOT src/common)
 set(NLIO_ROOT ${MATTER_MODULE_ROOT}/third_party/nlio/repo)
 include(${MATTER_MODULE_ROOT}/config/nrfconnect/app/enable-gnu-std.cmake)
 include(${MATTER_MODULE_ROOT}/src/app/chip_data_model.cmake)
@@ -28,7 +30,7 @@ include(${MATTER_MODULE_ROOT}/src/app/chip_data_model.cmake)
 # NORDIC SDK APP START
 target_include_directories(app PRIVATE
     src
-    ${COMMON_ROOT}/src
+    ${COMMON_ROOT}
     ${NLIO_ROOT}/include
     ${MATTER_MODULE_ROOT}/zzz_generated/app-common
 )
@@ -40,16 +42,16 @@ target_sources(app PRIVATE
     src/zcl_callbacks.cpp
     src/zap-generated/IMClusterCommandHandler.cpp
     src/zap-generated/callback-stub.cpp
-    ${COMMON_ROOT}/src/led_widget.cpp
-    ${COMMON_ROOT}/src/thread_util.cpp
+    ${COMMON_ROOT}/led_widget.cpp
+    ${COMMON_ROOT}/thread_util.cpp
 )
 
 if(CONFIG_CHIP_OTA_REQUESTOR)
-    target_sources(app PRIVATE ${COMMON_ROOT}/src/ota_util.cpp)
+    target_sources(app PRIVATE ${COMMON_ROOT}/ota_util.cpp)
 endif()
 
 if(CONFIG_MCUMGR_SMP_BT)
-    target_sources(app PRIVATE ${COMMON_ROOT}/src/dfu_over_smp.cpp)
+    target_sources(app PRIVATE ${COMMON_ROOT}/dfu_over_smp.cpp)
 endif()
 
 chip_configure_data_model(app
