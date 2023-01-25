@@ -2,6 +2,10 @@ cd /Users/gurvindersingh/Documents/Development/learning/connectedhomeip/examples
 cd /opt/nordic/ncs/v2.1.0
 
 
+## Template
+
+./scripts/tools/zap/run_zaptool.sh /Users/gurvindersingh/Documents/personal/Technical/hukam/repository/smart_switch/src/light_bulb.zap
+
 ## BUILD 
 west build -b nrf52840dk_nrf52840 -d build -- -DCONF_FILE=prj.conf
 
@@ -265,6 +269,61 @@ sudo route -A inet6 add 64:ff9b::/96 dev wpan0
 
 
 ```
+
+## AWS IoT Core
+
+### Create / Register Certificates for Device provisioning
+
+```
+
+openssl genrsa -out rootCA.key 2048
+openssl req -x509 -new -key rootCA.key -days 3650 -out rootCA.pem
+
+openssl genrsa -out verification_cert_key_aws.key 2048
+
+openssl req -new \
+    -key verification_cert_key_aws.key \
+    -out verification_cert_csr_aws.csr
+
+openssl x509 -req \
+    -in verification_cert_csr_aws.csr \
+    -CA rootCA.pem \
+    -CAkey rootCA.key \
+    -CAcreateserial \
+    -out verification_cert_aws.pem \
+    -days 500 -sha256
+
+
+openssl x509 -req \
+    -in verification_cert_csr_aws.csr \
+    -CA root_CA_cert.pem \
+    -CAkey root_CA_key.key \
+    -CAcreateserial \
+    -extensions v3_ca \
+    -out verification_cert_aws.pem \
+    -days 500 -sha256
+    
+
+
+openssl verify -verbose -CAfile root_CA_cert.pem verification_cert_aws.pem
+
+
+openssl genrsa -out rootCA.key 2048
+openssl req -x509 -new -key rootCA.key -days 3650 -out rootCA.pem \
+-subj '/C=AA/ST=AA/L=AA/O=AA Ltd/OU=AA/CN=AA/emailAddress=aa@aa.com'
+
+openssl genrsa -out client1.key 2048
+openssl req -new -key client1.key -out client1.csr \
+-subj '/C=BB/ST=BB/L=BB/O=BB Ltd/OU=BB/CN=BB/emailAddress=bb@bb.com'
+
+openssl x509 -req -days 365 -CA rootCA.pem -CAkey rootCA.key \
+-CAcreateserial -CAserial serial -in client1.csr -out client1.pem
+
+openssl verify -verbose -CAfile rootCA.pem client1.pem
+
+
+```
+
 
 ## REFERENCES
 
